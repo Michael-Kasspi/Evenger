@@ -21,3 +21,20 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+out/production/Evenger/META-INF/Evenger.kotlin_module
+Evenger.iml
+.idea/uiDesigner.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/libraries/Maven__org_opentest4j_opentest4j_1_2_0.xml
+.idea/libraries/Maven__org_junit_platform_junit_platform_engine_1_8_2.xml
+.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_8_2.xml
+.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_params_5_8_2.xml
+.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_8_2.xml
+.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_8_2.xml
+.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_5_8_2.xml
+.idea/libraries/Maven__org_apiguardian_apiguardian_api_1_1_2.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/artifacts/Evenger_war_exploded.xml
+.idea/workspace.xml
