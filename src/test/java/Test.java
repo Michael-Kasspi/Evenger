@@ -1,8 +1,10 @@
 import command.CommandBus;
+import command.Commands;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -80,6 +82,19 @@ public class Test {
             bus.close();
             final boolean inactive = bus.isActive();
             return active && !inactive;
+        }, c -> c);
+    }
+
+    public static UnitTest<?> test5() {
+        return new UnitTest<>("Test command registration and handling", () -> {
+            final CommandBus bus = CommandBus.getInstance();
+            bus.start();
+            Commands.register(EmptyTestCommand.class, cm -> {
+                System.out.println(cm.getId());
+            });
+            final String id = Commands.dispatch(EmptyTestCommand.class, new EmptyTestCommand());
+            bus.close();
+            return !id.isEmpty();
         }, c -> c);
     }
 
