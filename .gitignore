@@ -39,3 +39,4 @@ Evenger.iml
 .idea/artifacts/Evenger_war_exploded.xml
 .idea/workspace.xml
 .idea/vcs.xml
+target/test-classes/META-INF/Evenger.kotlin_module
