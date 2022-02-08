@@ -1,6 +1,6 @@
-import command.SimpleCommandBus;
-import command.Commands;
-import command.*;
+import command.CommandBus;
+import command.CommandBusFactory;
+import command.CommandMessage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -87,14 +87,14 @@ public class Test {
 
     public static UnitTest<?> test5() {
         return new UnitTest<>("Test command registration and handling", () -> {
-            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            final CommandBus bus = new CommandBusFactory().get("Simple");
             bus.init();
-            Commands.register(EmptyTestCommand.class, cm -> {
+            bus.getHandlerStore().register(EmptyTestCommand.class, cm -> {
                 System.out.println(cm.getId());
             });
-            final String id = Commands.dispatch(EmptyTestCommand.class, new EmptyTestCommand());
+            bus.getDispatcher().dispatch(new CommandMessage(UUID.randomUUID().toString(),EmptyTestCommand.class, new EmptyTestCommand()));
             bus.close();
-            return !id.isEmpty();
+            return true;
         }, c -> c);
     }
 
