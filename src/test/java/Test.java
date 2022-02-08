@@ -1,9 +1,11 @@
 import command.SimpleCommandBus;
 import command.Commands;
+import command.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -13,7 +15,6 @@ public class Test {
 
     private static final List<String> results = new ArrayList<>();
     private static boolean passed = true;
-
 
     final static List<UnitTest<?>> tests = new ArrayList<>();
 
@@ -42,7 +43,7 @@ public class Test {
 
     public static UnitTest<?> test1() {
         return new UnitTest<>("Activate bus > check status > expected: true", () -> {
-            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            final CommandBus bus = new CommandBusFactory().get("Simple");
             try {
                 bus.init();
                 return bus.isActive();
@@ -54,7 +55,7 @@ public class Test {
 
     public static UnitTest<?> test2() {
         return new UnitTest<>("Activate bus > check status > expected: false", () -> {
-            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            final CommandBus bus = new CommandBusFactory().get("Simple");
             bus.init();
             bus.close();
             return bus.isActive();
@@ -63,7 +64,7 @@ public class Test {
 
     public static UnitTest<?> test3() {
         return new UnitTest<>("Activate bus > close bus > expected: Exception", () -> {
-            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            final CommandBus bus = new CommandBusFactory().get("Simple");
             bus.init();
             bus.close();
             bus.getDispatcher();
@@ -73,7 +74,7 @@ public class Test {
 
     public static UnitTest<?> test4() {
         return new UnitTest<>("Test AbstractMessageBus inheritance", () -> {
-            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            final CommandBus bus = new CommandBusFactory().get("Simple");
             bus.init();
             final boolean active = bus.isActive();
             bus.getDispatcher();

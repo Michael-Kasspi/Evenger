@@ -1,7 +1,7 @@
 
 package message;
 
-public interface MessageBus<T, M extends Message<T>> {
+public interface MessageBus<T, M extends Message<T>> extends AutoCloseable {
     void init();
 
     void close();

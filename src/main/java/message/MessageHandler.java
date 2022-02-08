@@ -1,6 +1,6 @@
 package message;
 
 @FunctionalInterface
-public interface MessageHandler<T, M extends Message<? extends T>> {
+public interface MessageHandler<P, M extends Message<? extends P>> {
     void handle(M message);
 }
