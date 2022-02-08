@@ -1,10 +1,9 @@
-import command.CommandBus;
+import command.SimpleCommandBus;
 import command.Commands;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -45,7 +44,7 @@ public class Test {
         return new UnitTest<>("Activate bus > check status > expected: true", () -> {
             final SimpleCommandBus bus = SimpleCommandBus.getInstance();
             try {
-                bus.start();
+                bus.init();
                 return bus.isActive();
             } finally {
                 bus.close();
@@ -55,8 +54,8 @@ public class Test {
 
     public static UnitTest<?> test2() {
         return new UnitTest<>("Activate bus > check status > expected: false", () -> {
-            final CommandBus bus = CommandBus.getInstance();
-            bus.start();
+            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            bus.init();
             bus.close();
             return bus.isActive();
         }, r -> !r);
@@ -64,8 +63,8 @@ public class Test {
 
     public static UnitTest<?> test3() {
         return new UnitTest<>("Activate bus > close bus > expected: Exception", () -> {
-            final CommandBus bus = CommandBus.getInstance();
-            bus.start();
+            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            bus.init();
             bus.close();
             bus.getDispatcher();
             return null;
@@ -74,8 +73,8 @@ public class Test {
 
     public static UnitTest<?> test4() {
         return new UnitTest<>("Test AbstractMessageBus inheritance", () -> {
-            final CommandBus bus = CommandBus.getInstance();
-            bus.start();
+            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            bus.init();
             final boolean active = bus.isActive();
             bus.getDispatcher();
             bus.getHandlerStore();
@@ -87,8 +86,8 @@ public class Test {
 
     public static UnitTest<?> test5() {
         return new UnitTest<>("Test command registration and handling", () -> {
-            final CommandBus bus = CommandBus.getInstance();
-            bus.start();
+            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
+            bus.init();
             Commands.register(EmptyTestCommand.class, cm -> {
                 System.out.println(cm.getId());
             });
