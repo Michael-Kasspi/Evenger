@@ -16,7 +16,7 @@ public abstract class AbstractMessageBus<P, M extends Message<P>> implements Mes
 
     protected AbstractMessageBus(UnaryOperator<Builder> builderFunction) {
         Builder builder = builderFunction.apply(new Builder());
-        if (!builder.validate()) throw new IllegalArgumentException("Not all dependencies are satisfied");
+        if (!builder.isValid()) throw new IllegalArgumentException("Not all dependencies are satisfied");
         repository = builder.repository.get();
         dispatcher = builder.dispatcher.apply(repository);
         store = builder.store.get();
@@ -84,7 +84,7 @@ public abstract class AbstractMessageBus<P, M extends Message<P>> implements Mes
             return this;
         }
 
-        public boolean validate() {
+        public boolean isValid() {
             return repository != null &&
                     dispatcher != null &&
                     broker != null &&
