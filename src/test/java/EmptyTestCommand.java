@@ -4,6 +4,6 @@ public class EmptyTestCommand implements Command {
 
     @Override
     public String getId() {
-        return "Empty test command";
+        return "";
     }
 }
