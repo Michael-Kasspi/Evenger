@@ -1,31 +1,31 @@
 package message;
 
-public abstract class AbstractMessageBus<T, M extends Message<T>> implements MessageBus<T, M> {
+import java.util.function.*;
+
+public abstract class AbstractMessageBus<P, M extends Message<P>> implements MessageBus<P, M> {
 
     private static final String INACTIVE_MESSAGE = "This message bus is inactive";
     private static final String ACTIVE_MESSAGE = " This message bus already active";
 
-    protected final MessageBroker<T, M> broker;
+    protected final MessageBroker broker;
     protected final MessageDispatcher<M> dispatcher;
-    protected final MessageHandlerStore<T, M> store;
+    protected final MessageHandlerStore<P, M> store;
     protected final MessageRepository<M> repository;
 
     private boolean active;
 
-    protected AbstractMessageBus(Builder<T, M> builder) {
+    protected AbstractMessageBus(UnaryOperator<Builder> builderFunction) {
+        Builder builder = builderFunction.apply(new Builder());
         if (!builder.validate()) throw new IllegalArgumentException("Not all dependencies are satisfied");
-        repository = builder.repository;
-        dispatcher = builder.dispatcher;
-        broker = builder.broker;
-        store = builder.store;
+        repository = builder.repository.get();
+        dispatcher = builder.dispatcher.apply(repository);
+        store = builder.store.get();
+        broker = builder.broker.apply(repository, store);
     }
 
     @Override
-    public synchronized void start() {
+    public synchronized void init() {
         checkActive(active, ACTIVE_MESSAGE);
-        dispatcher.setRepository(repository);
-        broker.setSource(repository);
-        broker.setTarget(store);
         new Thread(broker).start();
         active = true;
     }
@@ -49,7 +49,7 @@ public abstract class AbstractMessageBus<T, M extends Message<T>> implements Mes
     }
 
     @Override
-    public MessageHandlerStore<T, M> getHandlerStore() {
+    public MessageHandlerStore<P, M> getHandlerStore() {
         checkActive(!active, INACTIVE_MESSAGE);
         return store;
     }
@@ -58,29 +58,29 @@ public abstract class AbstractMessageBus<T, M extends Message<T>> implements Mes
         if (condition) throw new IllegalStateException(message);
     }
 
-    public static class Builder<T, M extends Message<T>> {
-        MessageRepository<M> repository;
-        MessageDispatcher<M> dispatcher;
-        MessageBroker<T, M> broker;
-        MessageHandlerStore<T, M> store;
+    public class Builder {
+        Supplier<MessageRepository<M>> repository;
+        Function<MessageRepository<M>, MessageDispatcher<M>> dispatcher;
+        BiFunction<MessageRepository<M>, MessageHandlerStore<P, M>, MessageBroker> broker;
+        Supplier<MessageHandlerStore<P, M>> store;
 
-        public Builder<T, M> withRepository(MessageRepository<M> repository) {
+        public Builder withRepository(Supplier<MessageRepository<M>> repository) {
             this.repository = repository;
             return this;
         }
 
-        public Builder<T, M> withDispatcher(MessageDispatcher<M> dispatcher) {
+        public Builder withDispatcher(Function<MessageRepository<M>, MessageDispatcher<M>> dispatcher) {
             this.dispatcher = dispatcher;
             return this;
         }
 
-        public Builder<T, M> withBroker(MessageBroker<T, M> broker) {
-            this.broker = broker;
+        public Builder withHandlerStore(Supplier<MessageHandlerStore<P, M>> store) {
+            this.store = store;
             return this;
         }
 
-        public Builder<T, M> withHandlerStore(MessageHandlerStore<T, M> store) {
-            this.store = store;
+        public Builder withBroker(BiFunction<MessageRepository<M>, MessageHandlerStore<P, M>, MessageBroker> broker) {
+            this.broker = broker;
             return this;
         }
 

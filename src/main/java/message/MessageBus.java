@@ -2,7 +2,7 @@
 package message;
 
 public interface MessageBus<T, M extends Message<T>> {
-    void start();
+    void init();
 
     void close();
 
