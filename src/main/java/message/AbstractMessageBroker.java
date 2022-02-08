@@ -1,6 +1,6 @@
 package message;
 
-public abstract class AbstractMessageBroker<T, M extends Message<T>> implements MessageBroker<T, M> {
+public abstract class AbstractMessageBroker<T, M extends Message<T>> implements MessageBroker {
 
     protected boolean processing = true;
     protected MessageRepository<M> source;
