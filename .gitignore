@@ -151,3 +151,9 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/compiler.xml
+.idea/codeStyles/codeStyleConfig.xml
+Evenger.iml
