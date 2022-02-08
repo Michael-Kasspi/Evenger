@@ -4,12 +4,8 @@ public abstract class AbstractMessageDispatcher<M extends Message<?>> implements
 
     private MessageRepository<M> repository;
 
-
     protected AbstractMessageDispatcher(MessageRepository<M> repository) {
         this.repository = repository;
-    }
-
-    protected AbstractMessageDispatcher() {
     }
 
     public void setRepository(MessageRepository<M> r) {
