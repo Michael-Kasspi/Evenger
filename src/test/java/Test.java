@@ -43,7 +43,7 @@ public class Test {
 
     public static UnitTest<?> test1() {
         return new UnitTest<>("Activate bus > check status > expected: true", () -> {
-            final CommandBus bus = CommandBus.getInstance();
+            final SimpleCommandBus bus = SimpleCommandBus.getInstance();
             try {
                 bus.start();
                 return bus.isActive();
