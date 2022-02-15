@@ -157,3 +157,5 @@ buildNumber.properties
 .idea/compiler.xml
 .idea/codeStyles/codeStyleConfig.xml
 Evenger.iml
+.idea/artifacts/Evenger_war_exploded.xml
+.idea/jarRepositories.xml
