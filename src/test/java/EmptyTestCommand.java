@@ -1,4 +1,4 @@
-import command.Command;
+import command.api.Command;
 
 public class EmptyTestCommand implements Command {
 
