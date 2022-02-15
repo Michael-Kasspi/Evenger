@@ -1,17 +1,14 @@
 package message.impl;
 
-import message.api.Message;
-import message.api.MessageBroker;
-import message.api.MessageHandlerStore;
-import message.api.MessageRepository;
+import message.api.*;
 
-public abstract class AbstractMessageBroker<T, M extends Message<T>> implements MessageBroker {
+public abstract class AbstractMessageBroker<P, M extends Message<P>> implements MessageBroker {
 
     protected boolean processing = true;
     protected final MessageRepository<M> source;
-    protected final MessageHandlerStore<T, M> target;
+    protected final MessageHandlerStore<P,M,MessageHandler<P,M>> target;
 
-    protected AbstractMessageBroker(MessageRepository<M> source, MessageHandlerStore<T, M> target) {
+    protected AbstractMessageBroker(MessageRepository<M> source, MessageHandlerStore<P, M, MessageHandler<P,M>> target) {
         this.source = source;
         this.target = target;
     }
