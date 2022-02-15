@@ -1,6 +1,6 @@
-import command.CommandBus;
-import command.CommandBusFactory;
-import command.CommandMessage;
+import command.api.CommandBus;
+import command.impl.BaseCommandBusFactory;
+import command.impl.BasicCommandMessage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class Test {
 
     public static UnitTest<?> test1() {
         return new UnitTest<>("Activate bus > check status > expected: true", () -> {
-            final CommandBus bus = new CommandBusFactory().get("Simple");
+            final CommandBus bus = new BaseCommandBusFactory().get("Simple");
             try {
                 bus.init();
                 return bus.isActive();
@@ -55,7 +55,7 @@ public class Test {
 
     public static UnitTest<?> test2() {
         return new UnitTest<>("Activate bus > check status > expected: false", () -> {
-            final CommandBus bus = new CommandBusFactory().get("Simple");
+            final CommandBus bus = new BaseCommandBusFactory().get("Simple");
             bus.init();
             bus.close();
             return bus.isActive();
@@ -64,7 +64,7 @@ public class Test {
 
     public static UnitTest<?> test3() {
         return new UnitTest<>("Activate bus > close bus > expected: Exception", () -> {
-            final CommandBus bus = new CommandBusFactory().get("Simple");
+            final CommandBus bus = new BaseCommandBusFactory().get("Simple");
             bus.init();
             bus.close();
             bus.getDispatcher();
@@ -74,7 +74,7 @@ public class Test {
 
     public static UnitTest<?> test4() {
         return new UnitTest<>("Test AbstractMessageBus inheritance", () -> {
-            final CommandBus bus = new CommandBusFactory().get("Simple");
+            final CommandBus bus = new BaseCommandBusFactory().get("Simple");
             bus.init();
             final boolean active = bus.isActive();
             bus.getDispatcher();
@@ -87,12 +87,12 @@ public class Test {
 
     public static UnitTest<?> test5() {
         return new UnitTest<>("Test command registration and handling", () -> {
-            final CommandBus bus = new CommandBusFactory().get("Simple");
+            final CommandBus bus = new BaseCommandBusFactory().get("Simple");
             bus.init();
             bus.getHandlerStore().register(EmptyTestCommand.class, cm -> {
                 System.out.println(cm.getId());
             });
-            bus.getDispatcher().dispatch(new CommandMessage(UUID.randomUUID().toString(),EmptyTestCommand.class, new EmptyTestCommand()));
+            bus.getDispatcher().dispatch(new BasicCommandMessage(UUID.randomUUID().toString(),EmptyTestCommand.class, new EmptyTestCommand()));
             bus.close();
             return true;
         }, c -> c);
